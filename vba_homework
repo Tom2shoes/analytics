@@ -1,0 +1,39 @@
+Option Explicit
+
+Sub totalStockVolume():
+
+    Dim ticker As String
+    Dim tickerTotal As Double
+    Dim lastrow As Double
+    Dim i As Double
+    
+    'set the starting row for the summary table
+    Dim tickerTableRow As Integer
+    tickerTableRow = 2
+    
+    Dim totalStockVolume As Double
+    Dim ws As Worksheet
+        
+        For Each ws In Worksheets
+            
+            'set the starting summary table row as 2
+            tickerTableRow = 2
+            
+            ws.Range("I1").Value = "Ticker"
+            ws.Range("J1").Value = "Total Stock Volume"
+            lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+    
+                For i = 2 To lastrow
+      
+                   If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+                        ticker = ws.Cells(i, 1).Value
+                        ws.Range("I" & tickerTableRow).Value = ticker
+                        ws.Range("J" & tickerTableRow).Value = tickerTotal
+                        tickerTotal = tickerTotal + ws.Cells(i + 1, 7).Value
+                        tickerTableRow = tickerTableRow + 1
+                        tickerTotal = 0
+                    Else
+                        tickerTotal = tickerTotal + ws.Cells(i, 7).Value
+                   End If
+                Next i
+        Next ws
